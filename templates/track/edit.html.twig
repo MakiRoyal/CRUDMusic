@@ -1,0 +1,17 @@
+{# templates/track/edit.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer la track - {{ track.title }}{% endblock %}
+
+{% block body %}
+    <h1>Éditer la track</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {# Ajoutez d'autres champs de formulaire selon vos besoins #}
+        <button type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_track_show', {'slug': track.slug}) }}">Retour à la track</a>
+{% endblock %}

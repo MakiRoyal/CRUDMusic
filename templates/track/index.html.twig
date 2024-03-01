@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter ici vos musiques préférées{% endblock %}
+
+{% block body %}
+ 
+<h1>Liste de tracks :</h1>
+
+{% for track in tracks %}
+    {% if track.slug is not empty %}
+        <h3>
+            <a href="{{ path('app_track_show', {slug: track.slug}) }}">
+                {{ track.title|raw }}
+            </a>
+        </h3>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <form action="{{ path('app_track_delete', {id: track.id}) }}" method="POST">
+                <input type="hidden" name="csrf" value="{{ csrf_token('delete' ~ track.id) }}">
+                <input type="submit" value="Supprimer">
+            </form>
+
+            <a href="{{ path('app_track_edit', {id: track.id}) }}">Éditer</a>
+        {% endif %}
+    {% else %}
+        <p>La track n'a pas de slug valide.</p>
+    {% endif %}
+{% endfor %}
+
+
+{% if is_granted('ROLE_ADMIN') %}
+    <h2>Ajouter une track</h2>
+    {{ form(form) }}
+{% endif %}
+
+{% endblock %}
