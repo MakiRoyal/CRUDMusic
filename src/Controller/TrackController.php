@@ -21,15 +21,19 @@ class TrackController extends AbstractController
         $a_track = new Track();
         $form = $this->createForm(TrackType::class, $a_track);
 
+        dump($r);
         $form->handleRequest($r);
+
+        $user = $this->getUser();
         
-        if($form->isSubmitted() && $form->isValid()) {
+        if($form->isSubmitted() && $form->isValid() && $user->getRoles()[0] == "ROLE_ADMIN") {
             $slug = $slugger->slug($a_track->getTitle()) . '-' . uniqid(); 
             $a_track->setSlug(($slug));
 
-
             $em->persist($a_track);
             $em->flush();
+
+            return $this->redirectToRoute('app_track');
         }
 
         $tracks = $em->getRepository(Track::class)->findAll();
